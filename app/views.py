@@ -3,7 +3,7 @@ from flask.ext.login import login_user, logout_user, current_user, \
     login_required
 from app import app, db, lm, oid
 from .forms import LoginForm
-from .models import Student
+from .models import User
 
 
 @lm.user_loader
@@ -18,7 +18,7 @@ def before_request():
 
 @app.route('/')
 @app.route('/index')
-@login_required
+# @login_required
 def index():
     user = g.user
     posts = [

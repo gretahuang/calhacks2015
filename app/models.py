@@ -2,8 +2,9 @@ from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 from app import db
 from datetime import datetime
+from flask.ext.login import UserMixin
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "students"
 
     ID = db.Column(db.Integer, primary_key=True, unique=True)
@@ -13,10 +14,10 @@ class User(db.Model):
     reviews = db.relationship('Review', backref='students', lazy='dynamic', foreign_keys=[user_id])
 
 class Review(db.Model):
-    __tablename__ = "reviews"
+    __tablename__ = 'review'
 
-    ID = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.String)
+    id = db.Column(db.Integer, primary_key=True)
+    body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     propert = db.Column(db.String)
