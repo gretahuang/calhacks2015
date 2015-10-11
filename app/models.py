@@ -4,13 +4,18 @@ from app import db
 from datetime import datetime
 from flask.ext.login import UserMixin
 
+USERNAME_LEN = 20
+FULLNAME_LEN = 40
+EMAIL_LEN = 30
+BODY_LEN = 2000
+
 class User(UserMixin, db.Model):
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    username = db.Column(db.String, unique=True)
-    fullname = db.Column(db.String)
-    email = db.Column(db.String, unique=True)
+    username = db.Column(db.String(USERNAME_LEN), unique=True)
+    fullname = db.Column(db.String(FULLNAME_LEN))
+    email = db.Column(db.String(EMAIL_LEN), unique=True)
 
     # HAS MANY: reviews
     reviews = db.relationship('Review', backref='users', lazy='dynamic')
@@ -20,7 +25,7 @@ class Review(db.Model):
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
     timestamp = db.Column(db.DateTime)
-    body = db.Column(db.String)
+    body = db.Column(db.String(BODY_LEN))
 
     # foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -30,8 +35,8 @@ class Landlord(db.Model):
     __tablename__ = "landlords"
 
     id = db.Column(db.Integer, primary_key=True, unique=True)
-    fullname = db.Column(db.String)
-    username = db.Column(db.String)
+    fullname = db.Column(db.String(FULLNAME_LEN))
+    username = db.Column(db.String(USERNAME_LEN))
     is_female = db.Column(db.Boolean, default=True)
     race = db.Column(db.Integer)
     hair_color = db.Column(db.Integer)
