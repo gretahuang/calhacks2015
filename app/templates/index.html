@@ -1,11 +1,17 @@
-<!-- extend base layout -->
-{% extends "base.html" %}
-
-{% block content %}
-    <h1>Hi, {{ user.nickname }}!</h1>
-    {% for post in posts %}
-    <p>
-      {{ post.author.nickname }} says: <b>{{ post.body }}</b>
-    </p>
-    {% endfor %}
-{% endblock %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home Page</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+    <div class="banner">              
+        <strong>BERKLORDS</strong> is a free database of landlords at <strong>CAL</strong>.     
+    </div>
+    {% if not current_user.is_authenticated %}
+    <div class="button1">
+       	<a href="{{ url_for('oauth_authorize', provider='facebook') }}">Login with Facebook</a>
+    </div>
+    {% endif %}
+</body>
+</html>
