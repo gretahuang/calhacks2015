@@ -5,19 +5,31 @@ from datetime import datetime
 from flask.ext.login import UserMixin
 
 class User(UserMixin, db.Model):
-    __tablename__ = "students"
+    __tablename__ = "users"
 
-    ID = db.Column(db.Integer, primary_key=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     username = db.Column(db.String, unique=True)
     fullname = db.Column(db.String)
     email = db.Column(db.String, unique=True)
-    user_id = db.Column(db.Integer, ForeignKey('user.id'))
-    reviews = db.relationship('Review', backref='students', lazy='dynamic', foreign_keys=[user_id])
+
+    # HAS MANY: reviews
+    reviews = db.relationship('Review', backref='users', lazy='dynamic')
+
+class Review(db.Model):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    timestamp = db.Column(db.DateTime)
+    body = db.Column(db.String)
+
+    # foreign keys
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    landlord_id = db.Column(db.Integer, db.ForeignKey('landlords.id'))
 
 class Landlord(db.Model):
     __tablename__ = "landlords"
 
-    landlord_id = db.Column(db.Integer, primary_key=True, unique=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     fullname = db.Column(db.String)
     username = db.Column(db.String)
     is_female = db.Column(db.Boolean, default=True)
@@ -26,15 +38,14 @@ class Landlord(db.Model):
     total_rate = db.Column(db.Integer, default=0)
     num_rates = db.Column(db.Integer, default=0)
     avg_rating = db.Column(db.Float, default=0.0)
-    landlord = db.Column(db.String, ForeignKey('landlord'))
-    properties = db.relationship('Review.propert', backref='landlords', lazy='dynamic', foreign_keys=[landlord]) #Review.propert? how to get attr not object
 
-class Review(db.Model):
-    __tablename__ = 'reviews'
+    # HAS MANY: properties, reviews
+    properties = db.relationship('LLProperty', backref='landlords', lazy='dynamic')
+    reviews = db.relationship('Review', backref='landlords', lazy='dynamic')
 
-    review_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer)
-    timestamp = db.Column(db.DateTime)
-    body = db.Column(db.String(140))
-    propert = db.Column(db.String)
-    landlord = db.Column('Landlord') #quotes?
+class LLProperty(db.Model):
+    __tablename__ = "properties"
+
+    # foreign keys
+    user_id = db.Column(db.Integer, db.ForeignKey('landlords.id'))
+    review_id  = db.Column(db.Integer, db.ForeignKey('reviews.id'))
