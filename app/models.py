@@ -40,7 +40,7 @@ class Landlord(db.Model):
     avg_rating = db.Column(db.Float, default=0.0)
 
     # HAS MANY: properties, reviews
-    properties = db.relationship('LLProperty', backref='landlords', lazy='dynamic')
+    properties = db.relationship(LLProperty, backref='landlords', lazy='dynamic')
     reviews = db.relationship('Review', backref='landlords', lazy='dynamic')
 
 class LLProperty(db.Model):
