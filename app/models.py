@@ -50,6 +50,7 @@ class Landlord(db.Model):
 
 class LLProperty(db.Model):
     __tablename__ = "properties"
+    id = db.Column(db.Integer, primary_key=True, unique=True)
 
     # foreign keys
     user_id = db.Column(db.Integer, db.ForeignKey('landlords.id'))
