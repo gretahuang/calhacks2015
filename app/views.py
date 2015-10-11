@@ -1,11 +1,14 @@
 from flask import render_template, flash, redirect, session, url_for, request, g
 from flask.ext.login import login_user, logout_user, current_user, \
     login_required
+import flask.ext.whooshalchemy as whooshalchemy
 from app import app, db, lm, oid
 from .forms import LoginForm
-from .models import User
+from .models import User, Landlord, Review, LLProperty
 from oauth import OAuthSignIn
 
+whooshalchemy.whoosh_index(app, Student)
+whooshalchemy.whoosh_index(app, Project)
 
 @lm.user_loader
 def load_user(id):
@@ -25,23 +28,33 @@ def index():
                            title='Index')
 
 @app.route('/search')
-def home():
-    user = g.user
-    posts = [
-        {
-            'author': {'nickname': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'nickname': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    return render_template('search.html',
-                            title='Search',
-                            user=user,
-                            posts=posts)
+def search():
+    search_form = SearchForm()
+    if search_form.validate_on_submit():
+        return redirect(url_for('search', query=search_form.query.data))
 
+@app.route('/search/<query>')
+def search_results(query):   
+    search_form = SearchForm()
+    if search_form.validate_on_submit():
+        return redirect(url_for('search', query=search_form.query.data))
+
+    landlord_results = Landlord.query.whoosh_search(query, MAX_SEARCH_RESULTS).\
+                       filter_by(confirmed=True).all()
+
+    best_landlords = Landlord.query.order_by(Landlord.avg_rating)[:5]
+    worst_landlord = Landlord.query.order_by(Landlord.avg_rating.desc())[:5]
+
+    return render_template('searchpage.html',
+                            title='Search',
+                            landlord_results=landlord_results,
+                            best_landlords=best_landlords,
+                            worst_landlords=worst_landlords,
+                            search_form = SearchForm())
+
+@app.route('/profile/<id>')
+def landlord_profile(id):
+    return render_template('landlord_profile.html')
 
 @app.route('/logout')
 def logout():

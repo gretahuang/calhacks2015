@@ -14,9 +14,9 @@ class LoginForm(Form):
 #     description = TextAreaField('Description')   
 #     submit = SubmitField('Update profile')
 
-# class SearchForm(Form):
-#     query = StringField('Query', validators=[Required()])
-#     submit = SubmitField('Go')
+class SearchForm(Form):
+    query = StringField('Search', validators=[Required()])
+    submit = SubmitField('Submit')
 
 # class ReviewForm(Form):
 #     query = StringField('Query', validators=[Required()])
