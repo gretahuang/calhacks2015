@@ -1,17 +1,11 @@
-microblog
+LoCality
 =========
 
-A decently featured microblogging web application written in Python and Flask that I'm developing in my Flask Mega-Tutorial series that begins [here](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world).
+A landlord rating website exclusively for Berkeley students. Leave reviews on your landlord (anonymously!), add listings for subletting opportunities, choose to sponsor landlords so they can post.
+
+This project is still in progress, so the code is incomplete (10/14/15).
 
 Installation
 ------------
 
-The tutorial referenced above explains how to setup a virtual environment with all the required modules.
-
-The sqlite database must also be created before the application can run, and the `db_create.py` script takes care of that. See the [Database tutorial](http://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-iv-database) for the details.
-
-Running
--------
-
-To run the application in the development web server just execute `run.py` with the Python interpreter from the flask virtual environment.
-
+See requirements file.
